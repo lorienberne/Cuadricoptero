@@ -1,0 +1,7 @@
+syms xd;
+syms t;
+syms k21 k26 k22 k25 k13 k34
+
+x = ilaplace(;
+y = ;
+z = ;
