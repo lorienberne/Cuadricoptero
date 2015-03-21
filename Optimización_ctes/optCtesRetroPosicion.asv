@@ -1,7 +1,24 @@
 syms xd;
-syms t;
-syms k21 k26 k22 k25 k13 k34
+syms t s;
+syms k13 k16 k22 k25 k31 k34;
 
-x = ilaplace(;
-y = ;
-z = ;
+Xd = 1;
+ke = 1;
+kv = 1;
+ku = 1;
+
+
+x = subs(ilaplace(((-xd*k31)/s)/(s^2-k31-s*k34)),xd,Xd);
+e = Xd-x;
+u = k34*diff(x,t) + k31*e;
+
+fc = ke*int((e)^2,t,0,10) + kv*int(diff(x,t)^2,t,0,10) + ku*int(u^2,t,0,10);
+
+
+K31 = -1; 
+K34 = -1;
+while 1
+    dk31 = subs(subs(diff(fc,k1
+end
+
+
