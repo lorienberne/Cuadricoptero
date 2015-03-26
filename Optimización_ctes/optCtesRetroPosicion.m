@@ -4,8 +4,8 @@ syms k13 k16 k22 k25 k31 k34;
 
 Xd = 1;
 ke = 10000;
-kv = 2000;
-ku = 0.01;
+kv = 1500;
+ku = 1;
 
 
 x = subs(ilaplace(((-xd*k31)/s)/(s^2-k31-s*k34)),xd,Xd);
