@@ -16,5 +16,7 @@ classdef Kalman
             this.Q = Q;
             this.R = R;
         end
+        this = predict(this)
+        this = correct(this)
     end
 end
