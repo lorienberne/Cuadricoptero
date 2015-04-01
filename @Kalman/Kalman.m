@@ -7,16 +7,20 @@ classdef Kalman
         Q;
         R;
         K;
-    
     end
-    
-    methods 
+
+    methods
         function this = Kalman(Q,R)
         %%Constructor
             this.Q = Q;
             this.R = R;
         end
-        this = predict(this)
-        this = correct(this)
+
+        quad = addError(quad);
+        this = xPriori(this);
+        this = xPosteriori(this);
+        this = pPriori(this);
+        this = pPosteriori(this);
+        this = kCalc(this);
     end
 end
