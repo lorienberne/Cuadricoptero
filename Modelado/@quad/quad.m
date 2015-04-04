@@ -71,6 +71,11 @@ classdef quad
 
         %DRAWS THE QUAD IN PLOT FIGURE
         drawQuad(this, axScale);
+
+        %GETTERS
+        rotOmega = getRotorOmega(this);
+        thrust   = getThrust(this);
+        torque   = getTorque(this);
     end
 
 end

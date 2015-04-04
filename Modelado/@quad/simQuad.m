@@ -3,16 +3,10 @@ function this = simQuad(this)
     [this.curLHb, this.curLH1, this.curL12, this.curL2b] = calcRotMat(this.attitSttVect(1:3));
 
     %CALCULATE THE THRUST FOR EACH PROPELLER
-    T = [this.kProp(1) * this.rotorOmega(1)^2;
-         this.kProp(1) * this.rotorOmega(2)^2;
-         this.kProp(1) * this.rotorOmega(3)^2;
-         this.kProp(1) * this.rotorOmega(4)^2];
+    T = this.getThrust(this);
 
     %CALCULATE THE A VECTOR RESULT OF THE SUM OF ALL EXISTING TORQUES
-    M = [                               (T(1) - T(3)) * this.l;
-                                        (T(4) - T(2)) * this.l;
-         this.kProp(2) * (this.rotorOmega(1)^2 - this.rotorOmega(2)^2 + this.rotorOmega(3)^2 - this.rotorOmega(4)^2)];
-
+    M = this.getTorque(this);
 
     %CALCULATE THE ANGULAR ACCELERATION IN THE BODY REFERENCE FRAME
     pqrPto = this.inertia\(M - cross(this.pqr, this.inertia*this.pqr) - cross(this.pqr, [0; 0; (this.rotorIz * (-this.rotorOmega(1) + this.rotorOmega(2) - this.rotorOmega(3) + this.rotorOmega(4)))]));
