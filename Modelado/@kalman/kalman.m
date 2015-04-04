@@ -22,6 +22,7 @@ classdef kalman
 % SENSORS OBJECTS
         gyro;
         accel;
+        magnet;
 
         phiThetaPsi = [0; 0; 0];
         xyz         = [0; 0; 0];
@@ -30,14 +31,15 @@ classdef kalman
     methods
         function this = Kalman(Q,R,A,B,C,D)
         %% CONSTRUCTOR. INTIALIZATION OF VARIABLES
-            this.Q     = Q;
-            this.R     = R;
-            this.gyro  = gyro ();
-            this.accel = accel();
-            this.A     = A;
-            this.B     = B;
-            this.C     = C;
-            this.D     = D;
+            this.Q      = Q;
+            this.R      = R;
+            this.gyro   = gyro (%%%%);
+            this.accel  = accel(%%%%);
+            this.magnet = magnet(%%%%);
+            this.A      = A;
+            this.B      = B;
+            this.C      = C;
+            this.D      = D;
         end
 
         this = xPriori(this,quad);
