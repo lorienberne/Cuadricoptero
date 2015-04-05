@@ -10,9 +10,9 @@ classdef quad
         % CUADCOPTER'S PHYSICAL CARACTERISTICS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        l       = 0;%DISTANCE BETWEEN THE AXIS OF A PAIR OF PROPELLERS DIVIDED BY TWO
-        m       = 0;  %MASS OF THE QUADCOPTER
-        rotorIz = 0;  %MOMENT OF INERTIA OF EACH PROPELLER
+        l       = 0;      %DISTANCE BETWEEN THE AXIS OF A PAIR OF PROPELLERS DIVIDED BY TWO
+        m       = 0;      %MASS OF THE QUADCOPTER
+        rotorIz = 0;      %MOMENT OF INERTIA OF EACH PROPELLER
         inertia = [0 0 0; %TENSOR OF INERTIA OF THE QUADCOPTER
                    0 0 0;
                    0 0 0];
@@ -21,13 +21,13 @@ classdef quad
         % MECHANIC'S VARIABLES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        pqr    = [0 0 0]; %ANGULAR SPEED FROM BODY REFERENCE
+        pqr    = [0 0 0];                  %ANGULAR SPEED FROM BODY REFERENCE FRAME
 
         attitSttVect = [0; 0; 0; 0; 0; 0]; %PHI, THETA, PSI, PHIPTO, THETAPTO, PSIPTO;
         posSttVect   = [0; 0; 0; 0; 0; 0]; %X, Y, Z, XPTO, YPTO, ZPTO;
-        r2pto        = [0; 0; 0]; %X2PTO, Y2PTO, Z2PTO;
+        r2pto        = [0; 0; 0];          %X2PTO, Y2PTO, Z2PTO;
 
-        rotorOmega = [0 0 0 0]; %THE ANGULAR SPEED OF THE ROTORS IN RADS/S
+        rotorOmega = [0 0 0 0];            %THE ANGULAR SPEED OF THE ROTORS IN RADS/S
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%% ROTATION MATRICES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,7 +44,7 @@ classdef quad
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         quadFig; %CONTAINS THE IDENTIFIER OF THE FIGURE THAT HOLDS THE QUAD PLOT
-        dt; %THE DURATION IN SECONDS OF EACH TIMESTEP
+        dt;      %THE DURATION IN SECONDS OF EACH TIMESTEP
     end
 
     methods
@@ -60,8 +60,8 @@ classdef quad
                              0   i(2)  0 ;
                              0    0  i(3)];
             this.rotorIz = rotorIz;
-            this.kProp = kProp;
-            this.dt = dt;
+            this.kProp   = kProp;
+            this.dt      = dt;
         end
 
         phiOmegaPsi = pqr2phiOmegaPsiPto(pqr,pOp);
@@ -76,6 +76,9 @@ classdef quad
         rotOmega = getRotorOmega(this);
         thrust   = getThrust(this);
         torque   = getTorque(this);
+
+        %SETTERS
+        %setRotorOmega(rOmega);
     end
 
 end
