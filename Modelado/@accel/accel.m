@@ -4,7 +4,7 @@ classdef accel
   end
 
   methods
-    function this = accel(this,cov)
+    function this = accel(cov)
       this.cov = cov;
     end
 

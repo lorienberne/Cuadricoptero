@@ -1,7 +1,7 @@
 function this = updateKalman(this)
-  this.xPriori     = this.xPriori();
-  this.pPriori     = this.pPriori();
-  this.K           = this.kCalc();
-  this.xPosteriori = this.xPosteriori();
-  this.pPosteriori = this.pPosteriori();
+  this.xPriori     = this.CalcXPriori();
+  this.pPriori     = this.CalcPPriori();
+  this.K           = this.CalcK();
+  this.xPosteriori = this.CalcXPosteriori();
+  this.pPosteriori = this.CalcPPosteriori();
 end

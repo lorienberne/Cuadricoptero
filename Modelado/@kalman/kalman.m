@@ -40,7 +40,7 @@ classdef kalman
     end
 
     methods
-        function this = Kalman(Q,R,A,B,C,D,dt)
+        function this = kalman(Q,R,A,B,C,D,dt)
         %% CONSTRUCTOR. INTIALIZATION OF VARIABLES
             this.Q      = Q;
             this.R      = R;
@@ -54,11 +54,11 @@ classdef kalman
             this.dt     = dt;
         end
 
-        this = xPriori(this,quad);
-        this = xPosteriori(this);
-        this = pPriori(this);
-        this = pPosteriori(this);
-        this = kCalc(this);
-        this = updateKalman(this,quad);
+        this = CalcXPriori(this,quad);
+        this = CalcXPosteriori(this);
+        this = CalcPPriori(this);
+        this = CalcPPosteriori(this);
+        this = CalcK(this);
+        this = CalcUpdateKalman(this,quad);
     end
 end
