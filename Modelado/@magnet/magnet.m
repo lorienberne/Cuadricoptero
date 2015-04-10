@@ -7,6 +7,6 @@ classdef magnet
     function this = magnet(cov)
       this.cov = cov;
     end
-    mgMmnt = magMeasure(quad);
+    mgMmnt = magMeasure(this,quad);
   end
 end

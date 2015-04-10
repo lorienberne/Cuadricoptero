@@ -5,10 +5,10 @@
 function drawQuad(this, axScale)
 
 %CALCULATE THE COORDENATES OF EACH END OF THE QUADCOPTER
-    a = this.posSttVect + (this.curLHb * ([this.l    0    0]'));
-    b = this.posSttVect + (this.curLHb * ([   0    this.l 0]'));
-    c = this.posSttVect + (this.curLHb * ([-this.l   0    0]'));
-    d = this.posSttVect + (this.curLHb * ([0      -this.l 0]'));
+    a = this.posSttVect(1:3) + (this.curLHb * ([this.l    0    0]'));
+    b = this.posSttVect(1:3) + (this.curLHb * ([   0    this.l 0]'));
+    c = this.posSttVect(1:3) + (this.curLHb * ([-this.l   0    0]'));
+    d = this.posSttVect(1:3) + (this.curLHb * ([0      -this.l 0]'));
 
 %ADJUST THE SCALE OF THE AXIS VALUES OF THE PLOT
     axScale = [-axScale axScale -axScale axScale -axScale axScale];

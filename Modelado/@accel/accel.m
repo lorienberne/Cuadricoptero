@@ -8,7 +8,7 @@ classdef accel
       this.cov = cov;
     end
 
-    accelMmnts = accelMeasure(quad);
+    accelMmnts = accelMeasure(this,quad);
   end
 
 end
