@@ -9,7 +9,7 @@ function this = simQuad(this)
     M = this.getTorque();
 
     %CALCULATE THE ANGULAR ACCELERATION IN THE BODY REFERENCE FRAME
-    pqrPto = real(this.inertia\(M - cross(this.pqr, this.inertia*this.pqr) - cross(this.pqr, [0; 0; (this.rotorIz * (-this.rotorOmega(1) + this.rotorOmega(2) - this.rotorOmega(3) + this.rotorOmega(4)))])));
+    pqrPto = this.inertia\(M - cross(this.pqr, this.inertia*this.pqr) - cross(this.pqr, [0; 0; (this.rotorIz * (-this.rotorOmega(1) + this.rotorOmega(2) - this.rotorOmega(3) + this.rotorOmega(4)))]));
 
     %CALCULATE THE ANGULAR SPEED
     this.pqr = this.pqr + pqrPto * this.dt;
@@ -27,6 +27,4 @@ function this = simQuad(this)
     %UPDATE POSITION STATE VECTOR
     this.posSttVect(4:6,1) = this.posSttVect(4:6,1) + this.r2pto * this.dt; %UPDATE SPEED
     this.posSttVect(1:3,1) = this.posSttVect(1:3,1) + this.posSttVect(4:6,1) * this.dt;%UPDATE POSITION
-
-
 end

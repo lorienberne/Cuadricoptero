@@ -117,7 +117,10 @@ attK = [10 0 0 50 0 0;
         0 10 0 0 50 0;
         0 0 10 0 0 50];
 
-posK = 0.01*ones(4,6);
+posK = [0 0 10 0 0 50;
+        0 10 0 0 50 0;
+        10 0 0 50 0 0
+        0 0 0 0 0 0];
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,7 +160,8 @@ gpsSensor    = gps([GPSPosCov; GPSSpeedCov]);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-posDesState = [0; 0; 0; 0; 0; 0];
+dState = [0; pi/4; 0; 0; 0; 0];
+posMState = [0; 0; 0; 0; 0; 0];
 
 for t = 0:dt:10
 
@@ -172,8 +176,8 @@ for t = 0:dt:10
   posKalFil = posKalFil.updateKalman(q, posMState);
 
 %GET CONTROL SIGNAL AND SET PROPS TO THAT SPEED
-  posFBSignal = posfback.getControlSignal(posKalFil, posDesState);
-  attFBSignal = attfback.getControlSignal(attKalFil, [posFBSignal(2:4,1); 0; 0; 0]);
+  posFBSignal = posfback.getControlSignal(posKalFil, posMState);
+  attFBSignal = attfback.getControlSignal(attKalFil, [posFBSignal(2:4,1); 0; 0; 0])
   q = q.setPropSpeed(attFBSignal,posFBSignal(1,1));
 
 %CARRY OUT A SIMULATION TIMESTEP

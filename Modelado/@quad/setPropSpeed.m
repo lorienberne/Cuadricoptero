@@ -1,6 +1,6 @@
-function this = setPropSpeed(this,signal)
-  this.rotorOmega = [this.rotorOmega(1) + sqrt(signal(1)/2) + sqrt(signal(3)/4);
-                     this.rotorOmega(2) - sqrt(signal(2)/2) - sqrt(signal(3)/4);
-                     this.rotorOmega(3) - sqrt(signal(1)/2) + sqrt(signal(3)/4);
-                     this.rotorOmega(4) + sqrt(signal(2)/2) - sqrt(signal(3)/4)];
+function this = setPropSpeed(this,attSignal, posSignal)
+  this.rotorOmega = [509.35 + sign(posSignal)*sqrt(abs(posSignal)/4) + sign(attSignal(1))*sqrt(abs(attSignal(1))/2) + sign(attSignal(3))*sqrt(abs(attSignal(3))/4);
+                     509.35 + sign(posSignal)*sqrt(abs(posSignal)/4) - sign(attSignal(2))*sqrt(abs(attSignal(2))/2) - sign(attSignal(3))*sqrt(abs(attSignal(3))/4);
+                     509.35 + sign(posSignal)*sqrt(abs(posSignal)/4) - sign(attSignal(1))*sqrt(abs(attSignal(1))/2) + sign(attSignal(3))*sqrt(abs(attSignal(3))/4);
+                     509.35 + sign(posSignal)*sqrt(abs(posSignal)/4) + sign(attSignal(2))*sqrt(abs(attSignal(2))/2) - sign(attSignal(3))*sqrt(abs(attSignal(3))/4)];
 end
