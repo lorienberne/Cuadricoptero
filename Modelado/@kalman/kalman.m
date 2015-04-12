@@ -31,7 +31,7 @@ classdef kalman
 
 % SENSORS OBJECTS
         dt;
-        
+
     end
 
     methods
@@ -46,7 +46,7 @@ classdef kalman
             this.dt     = dt;
         end
 
-        this = CalcXPriori(this,quad);
+        this = CalcXPriori(this,u);
         this = CalcXPosteriori(this, mState);
         this = CalcPPriori(this);
         this = CalcPPosteriori(this);

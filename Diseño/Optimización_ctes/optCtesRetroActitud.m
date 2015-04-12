@@ -5,7 +5,7 @@ syms k1 k2;
 Xd = 1;
 ke = 10000;
 kv = 1500;
-ku = 100;
+ku = 1;
 
 
 x = subs(ilaplace(((-xd*k1)/s)/(s^2-k1-s*k2)),xd,Xd);
@@ -21,8 +21,8 @@ while 1
     dk1 = double(subs(subs(diff(fc,k1),k1,K1),k2,K2));
     dk2 = double(subs(subs(diff(fc,k2),k1,K1),k2,K2));
 
-    K1 = K1 - 0.0001*dk1;
-    K2 = K2 - 0.0001*dk2;
+    K1 = K1 - 0.01*dk1;
+    K2 = K2 - 0.01*dk2;
 
     if( abs(dk1) < 0.01 && abs(dk2) < 0.01)
         break;

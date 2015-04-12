@@ -3,7 +3,7 @@ classdef fback
     K = 0;
   end
   methods
-    function this = fback(K);
+    function this = fback(K)
       this.K = K;
     end
     signal = getControlSignal(this, kalman, desiredState);

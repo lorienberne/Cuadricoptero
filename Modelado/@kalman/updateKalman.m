@@ -1,5 +1,5 @@
-function this = updateKalman(this, quad, mState)
-  this.xPriori     = this.CalcXPriori(quad);
+function this = updateKalman(this, u, mState)
+  this.xPriori     = this.CalcXPriori(u);
   this.pPriori     = this.CalcPPriori();
   this.K           = this.CalcK();
   this.xPosteriori = this.CalcXPosteriori(mState);
