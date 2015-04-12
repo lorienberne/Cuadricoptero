@@ -1,3 +1,3 @@
 function signal = getControlSignal(this, kalman, desiredState)
-    signal = -this.K*(desiredState - kalman.getState() );
+    signal = -this.K*(kalman.getState() - desiredState);
 end
