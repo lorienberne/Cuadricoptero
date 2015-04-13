@@ -1,5 +1,4 @@
 clc;
-clear all;
 close all;
 tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -15,8 +14,8 @@ dt = 0.01;
 %% KALMAN FILTER PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 MCov        = 0.002^2;
 ACov        = 0.0004^2;
-GCov        = (0.05*pi/180)^2;
-GPSPosCov   = 0.01;
+GCov        = (0.005*pi/180)^2;
+GPSPosCov   = 1;
 GPSSpeedCov = 0.1;
 
 % COVARIANCE MATRIX
@@ -81,8 +80,8 @@ posA = [0 0 0 1 0 0;
 posB = [      0          0        0       0    ;
               0          0        0       0    ;
               0          0        0       0    ;
-              0          0     96.145     0    ;
-              0          0        0    -96.145 ;
+              0          0     -96.145     0    ;
+              0          0        0    96.145 ;
         -0.0000094838    0        0       0    ];
 
 posC = eye(6);
@@ -114,14 +113,14 @@ kProp = [0.000009958, 0.0000009315];
 
 %% FEEDBACK PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-attK =  [      0         0    518837.27  0        0   219705.88;
-               0     89034.43    0       0    37702.36   0     ;
-           89034.43      0       0    37702.36    0      0     ]*0.01;
+attK =  [      0     0    48    0     0    982;
+               0    48    0     0    982     0;
+              161    0     0     3264     0    0];
 
-posK =  [    0      0   -333639.24   0       0     -198934.59;
+posK =  [    0      0       -1      0       0        -1    ;
              0      0       0       0       0         0    ;
-         -0.0196    0       0   -0.0328     0         0    ;
-             0   0.0196     0       0     0.0328      0    ]*10;
+            -0.0001151      0       0      -0.116     0         0    ;
+             0      1       0       0        1        0    ];
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,7 +166,7 @@ plotPos     = [];
 plotRatt    = [];
 plotEPos    = [];
 plotUAtt    = [];
-for t = 0:dt:4
+for t = 0:dt:10
 %GET INPUT
   rotorOmega = q.getRotorOmega();
   attU = [             rotorOmega(1)^2 - rotorOmega(3)^2;
@@ -178,7 +177,7 @@ for t = 0:dt:4
 
 %GET SENSOR MEASUREMENTS
   attMState = [magnetSensor.magMeasure(q);
-               accelSensor.getAccelAngle(q);
+               q.attitSttVect(2:3);
                gyroSensor.gyroMeasure(q)];
   posMState =  gpsSensor.gpsMeasure(q);
 
@@ -187,24 +186,24 @@ for t = 0:dt:4
   posKalFil = posKalFil.updateKalman(posU, posMState);
 
 %GET CONTROL SIGNAL AND SET PROPS TO THAT SPEED
-%  posFBSignal = posfback.getControlSignal(posKalFil, posDesState);
-  attFBSignal = attfback.getControlSignal(attKalFil,q.attitSttVect,[posFBSignal(2:4,1); 0; 0; 0])
+  posFBSignal = posfback.getControlSignal(posKalFil, posDesState);
+  attFBSignal = attfback.getControlSignal(attKalFil,[posFBSignal(2:4,1); 0; 0; 0]);
   q = q.setPropSpeed(attFBSignal,posFBSignal(1,1));
-  %q.posSttVect = zeros(6,1);
+    
 %CARRY OUT A SIMULATION TIMESTEP
   q = q.simQuad();
-  q.posSttVect = [0; 0; 0; 0; 0; 0];
+
 %PLOT THE RESULT
   q.drawQuad(5);
   pause(dt);
-  plotPos = [plotPos posKalFil.getState()];
+  plotPos  = [plotPos posKalFil.getState()];
   plotRatt = [plotRatt q.attitSttVect];
   plotEPos = [plotEPos posMState];
   plotUAtt = [plotUAtt attFBSignal];
 end
 
 
-t = 0:dt:4;
+t = 0:dt:10;
 
 figure();
 hold on;
