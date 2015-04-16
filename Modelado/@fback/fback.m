@@ -6,6 +6,6 @@ classdef fback
     function this = fback(K)
       this.K = K;
     end
-    signal = getControlSignal(this, kalman, desiredState);
+    signal = getControlSignal(this, kalman,state, desiredState);
   end
 end

@@ -3,26 +3,26 @@ syms t s;
 syms k1 k2;
 
 Xd = 1;
-ke = 100;
-kv = 1500;
-ku = 10;
+ke = 1;
+kv = 1;
+ku = 1250;
 
 
 x = subs(ilaplace(((-xd*k1)/s)/(s^2-k1-s*k2)),xd,Xd);
-e = Xd-x;
-u = k2*diff(x,t) + k1*e;
+e = x-Xd;
+u = (k2*diff(x,t))^2 + (k1*e)^2;
 
-fc = ke*int((e)^2,t,0,10) + kv*int(diff(x,t)^2,t,0,10) + ku*int(u^2,t,0,10);
+fc = ke*int((e)^2,t,0,10) + kv*int(diff(x,t)^2,t,0,10) + ku*int(u,t,0,10);
 
 
 K1 = -100;
 K2 = -100;
-while 1
+for i = 0:2000
     dk1 = double(subs(subs(diff(fc,k1),k1,K1),k2,K2));
     dk2 = double(subs(subs(diff(fc,k2),k1,K1),k2,K2));
 
-    K1 = K1 - 0.0001*dk1;
-    K2 = K2 - 0.0001*dk2;
+    K1 = K1 - 0.000001*dk1;
+    K2 = K2 - 0.000001*dk2;
 
     if( abs(dk1) < 0.01 && abs(dk2) < 0.01)
         break;
@@ -30,7 +30,7 @@ while 1
 end
 
 
-f = subs(subs(x,k1,K1),k2,K2);
+f = subs(subs(u,k1,K1),k2,K2);
 ezplot(f,[0 10]);
 axis([-5 10 0 5]);
 

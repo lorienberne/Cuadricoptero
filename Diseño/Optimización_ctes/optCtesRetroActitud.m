@@ -3,9 +3,9 @@ syms t s;
 syms k1 k2;
 
 Xd = 1;
-ke = 50;
-kv = 1200;
-ku = 1;
+ke = 10000;
+kv = 10;
+ku = 100;
 
 
 x = subs(ilaplace(((xd*k1)/s)/(s^2+s*k2+k1)),xd,Xd);
@@ -29,7 +29,7 @@ end
 
 f = subs(subs(x,k1,K1),k2,K2);
 ezplot(f,[0 10]);
-axis([-5 10 0 5]);
+axis([-5 2 0 5]);
 
 K1
 K2
