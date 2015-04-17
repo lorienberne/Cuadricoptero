@@ -1,11 +1,9 @@
 classdef alphabeta
   properties
-    alpha;
   end
   methods
-    function this = alphabeta(alpha)
-      this.alpha = alpha;
+    function this = alphabeta()
     end
-    filtered = alphaFilter(medidas)
+    filtered = alphaFilter(medidas,alpha)
   end
 end

@@ -19,11 +19,11 @@ dt = 0.01;
 % GPSPosCov   = 1;
 % GPSSpeedCov = 0.1;
 
-MCov        = 0.00000000001;
-ACov        = 0.00000000001;
-GCov        = 0.00000000001;
-GPSPosCov   = 0.00000000001;
-GPSSpeedCov = 0.00000000001;
+MCov        = 0.01;
+ACov        = 0.01;
+GCov        = 0.01;
+GPSPosCov   = 1;
+GPSSpeedCov = 0.1;
 
 % COVARIANCE MATRIX
 attQ = [MCov 0 0 0 0 0; % M -> MAGNETOMETER'S COVARIANCE
@@ -122,11 +122,11 @@ kProp = [0.000009958, 0.0000009315];
 
 attK =  [1.9707 0 0 0.9067 0 0;
          0 1.9707 0 0 0.9067 0;
-         0 0 6.5484  0  0 3.0127]*100000;
+         0 0 6.5484  0  0 3.0127]*1000000;
 
 posK =  [    0         0     -1000000    0       0      -45922000 ;
-             0         0.1*0.8    0       0    0.10103*1.5        0 ;
-             -0.1*0.8    0        0      -0.10103*1.5  0         0 ;
+             0         0.1*0.8*1.5    0       0    0.10103*1.5*1.3        0 ;
+             -0.1*0.8*1.5    0        0      -0.10103*1.5*1.3  0         0 ;
              0         0        0       0       0         0 ];
 
 
@@ -167,7 +167,7 @@ gpsSensor    = gps([GPSPosCov; GPSSpeedCov]);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-posDesState = [0; 1; -1; 0; 0; 0];
+posDesState = [2; 0; -1; 0; 0; 0];
 posFBSignal = [0; 0; 0; 0];
 
 plotPos        = [];
@@ -211,7 +211,7 @@ for t = 0:dt:6
   q = q.simQuad();
   q.rotorOmega
 %PLOT THE RESULT
-  q.drawQuad(10);
+  q.drawQuad(5);
   pause(dt);
   plotPos  = [plotPos posKalFil.getState()];
   plotEPos = [plotEPos posMState];
