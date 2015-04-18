@@ -1,5 +1,5 @@
-function phiThetaPsiPto = pqr2phiThetaPsiPto(this,pqr,pOp)
-  phiThetaPsiPto = [(pqr(1) + tan(pOp(2)) * (pqr(2) * sin(pOp(1)) + pqr(3)*cos(pOp(1))));
-                    (pqr(2) * cos(pOp(1)) +  pqr(3) * sin(pOp(1)))                      ;
-                   ((pqr(2) * sin(pOp(1)) +  pqr(3) * cos(pOp(1)))/cos(pOp(2)))        ];
+function phiThetaPsiPto = pqr2phiThetaPsiPto(this,pqr,ptp)
+  phiThetaPsiPto = [(pqr(1) + tan(ptp(2)) * (pqr(2) * sin(ptp(1)) + pqr(3)*cos(ptp(1))));
+                    (pqr(2) * cos(ptp(1)) +  pqr(3) * sin(ptp(1)))                      ;
+                   ((pqr(2) * sin(ptp(1)) +  pqr(3) * cos(ptp(1)))/cos(ptp(2)))        ];
 end

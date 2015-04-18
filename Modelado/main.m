@@ -120,14 +120,14 @@ kProp = [0.000009958, 0.0000009315];
 
 %% FEEDBACK PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-attK =  [1.9707 0 0 0.9067 0 0;
-         0 1.9707 0 0 0.9067 0;
-         0 0 6.5484  0  0 3.0127]*1000000;
+attK =  [1.9707   0     0  0.9067   0     0  ;
+            0  1.9707   0    0   0.9067   0  ;
+            0     0  6.5484  0      0  3.0127]*1000000;
 
-posK =  [    0         0     -1000000    0       0      -45922000 ;
-             0         0.1*0.8*1.5    0       0    0.10103*1.5*1.3        0 ;
-             -0.1*0.8*1.5    0        0      -0.10103*1.5*1.3  0         0 ;
-             0         0        0       0       0         0 ];
+posK =  [         0           0      -1000000       0               0         -4592200  ;
+                  0      0.1*0.8*1.5    0           0          0.10103*1.5*1.3    0     ;
+             -0.1*0.8*1.5     0         0      -0.10103*1.5*1.3     0             0     ;
+                  0           0         0           0               0             0     ];
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,7 +167,7 @@ gpsSensor    = gps([GPSPosCov; GPSSpeedCov]);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-posDesState = [2; 0; -1; 0; 0; 0];
+posDesState = [3; 4; -2; 0; 0; 0];
 posFBSignal = [0; 0; 0; 0];
 
 plotPos        = [];
@@ -184,6 +184,8 @@ plotAttV       = [];
 
 plotPosSignal  = [];
 plotAttSignal  = [];
+
+
 for t = 0:dt:6
 %GET INPUT
   rotorOmega = q.getRotorOmega();
@@ -206,10 +208,10 @@ for t = 0:dt:6
   posFBSignal = posfback.getControlSignal(posKalFil,q.posSttVect, posDesState);
   attFBSignal = attfback.getControlSignal(attKalFil,q.attitSttVect,[posFBSignal(2:4,1); 0; 0; 0]);
   q = q.setPropSpeed(attFBSignal,posFBSignal(1,1));
-
+    
 %CARRY OUT A SIMULATION TIMESTEP
   q = q.simQuad();
-  q.rotorOmega
+  q.posSttVect
 %PLOT THE RESULT
   q.drawQuad(5);
   pause(dt);
@@ -225,7 +227,7 @@ for t = 0:dt:6
 
   plotAttV  = [plotAttV q.attitSttVect(4:6)];
 
-  plotPosSignal = [plotPosSignal posFBSignal(2:4)];
+  plotPosSignal = [plotPosSignal posFBSignal(1:3)];
   plotAttSignal = [plotAttSignal attFBSignal];
 end
 
@@ -244,9 +246,9 @@ hold off;
 figure();
 hold on;
 title('Actitud PSI');
-plot(t,plotAtt(1,:));
-plot(t,plotEAtt(1,:));
-plot(t,plotRatt(1,:));
+plot(t,plotAtt(3,:));
+plot(t,plotEAtt(3,:));
+plot(t,plotRatt(3,:));
 legend('Filtered','Measured','Real');
 hold off;
 
@@ -280,18 +282,18 @@ hold off;
 figure();
 hold on;
 title('Actitud PHI');
-plot(t,plotAtt(3,:));
-plot(t,plotEAtt(3,:));
-plot(t,plotRatt(3,:));
+plot(t,plotAtt(1,:));
+plot(t,plotEAtt(1,:));
+plot(t,plotRatt(1,:));
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Se�al Posicion');
-plot(t,plotPosSignal(1,:));
-plot(t,plotPosSignal(2,:));
 plot(t,plotPosSignal(3,:));
+plot(t,plotPosSignal(2,:));
+plot(t,plotPosSignal(1,:));
 legend('X','Y','Z');
 hold off;
 
