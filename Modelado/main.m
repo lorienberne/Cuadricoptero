@@ -135,7 +135,7 @@ posK =  [         0           0      -1000000       0               0         -4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ATTITUDE STATE VECTOR (PHI THETA PSI PHIDOT THETADOT PSIDOT)
-attitSttVect = [0; 0; 0; 0; 0; 0];
+attitSttVect = [0; -0.3; 0; 0; 0; 0];
 
 % POSITION STATE VECTOR (X Y Z XDOT YDOT ZDOT)
 posSttVect   = [0; 0; 0; 0; 0; 0];
@@ -158,7 +158,8 @@ accelSensor  = accel(ACov);
 magnetSensor = magnet(MCov);
 gyroSensor   = gyro(GCov);
 gpsSensor    = gps([GPSPosCov; GPSSpeedCov]);
-
+%abFilter     = alphabeta();
+%nmedFilter   = nmedidas(5,dt);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -186,7 +187,7 @@ plotPosSignal  = [];
 plotAttSignal  = [];
 
 
-for t = 0:dt:6
+for t = 0:dt:10
 %GET INPUT
   rotorOmega = q.getRotorOmega();
   attU = [             rotorOmega(1)^2 - rotorOmega(3)^2;
@@ -203,6 +204,14 @@ for t = 0:dt:6
 %ESTIMATE QUAD STATE
   attKalFil = attKalFil.updateKalman(attU, attMState);
   posKalFil = posKalFil.updateKalman(posU, posMState);
+
+%FILTER WITH ALPHA BETA FILTER
+  
+
+
+%N MEASUREMENTS FILTER
+ % attNFil = nmedFilter();
+ % posNFil = nmedFilter();
 
 %GET CONTROL SIGNAL AND SET PROPS TO THAT SPEED
   posFBSignal = posfback.getControlSignal(posKalFil,q.posSttVect, posDesState);
@@ -232,86 +241,86 @@ for t = 0:dt:6
 end
 
 
-t = 0:dt:6;
+t = 0:dt:10;
 
 figure();
 hold on;
 title('Posicion X');
-plot(t,plotPos(1,:));
-plot(t,plotEPos(1,:));
-plot(t,plotRPos(1,:));
+plot(t,plotPos(1,:),'r');
+plot(t,plotEPos(1,:),'g');
+plot(t,plotRPos(1,:),'b');
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Actitud PSI');
-plot(t,plotAtt(3,:));
-plot(t,plotEAtt(3,:));
-plot(t,plotRatt(3,:));
+plot(t,plotAtt(3,:),'r');
+plot(t,plotEAtt(3,:),'g');
+plot(t,plotRatt(3,:),'b');
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Posicion Y');
-plot(t,plotPos(2,:));
-plot(t,plotEPos(2,:));
-plot(t,plotRPos(2,:));
+plot(t,plotPos(2,:),'r');
+plot(t,plotEPos(2,:),'g');
+plot(t,plotRPos(2,:),'b');
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Actitud THETA');
-plot(t,plotAtt(2,:));
-plot(t,plotEAtt(2,:));
-plot(t,plotRatt(2,:));
+plot(t,plotAtt(2,:),'r');
+plot(t,plotEAtt(2,:),'g');
+plot(t,plotRatt(2,:),'b');
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Posicion Z');
-plot(t,plotPos(3,:));
-plot(t,plotEPos(3,:));
-plot(t,plotRPos(3,:));
+plot(t,plotPos(3,:),'r');
+plot(t,plotEPos(3,:),'g');
+plot(t,plotRPos(3,:),'b');
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Actitud PHI');
-plot(t,plotAtt(1,:));
-plot(t,plotEAtt(1,:));
-plot(t,plotRatt(1,:));
+plot(t,plotAtt(1,:),'r');
+plot(t,plotEAtt(1,:),'g');
+plot(t,plotRatt(1,:),'b');
 legend('Filtered','Measured','Real');
 hold off;
 
 figure();
 hold on;
 title('Se�al Posicion');
-plot(t,plotPosSignal(3,:));
-plot(t,plotPosSignal(2,:));
-plot(t,plotPosSignal(1,:));
+plot(t,plotPosSignal(3,:),'r');
+plot(t,plotPosSignal(2,:),'g');
+plot(t,plotPosSignal(1,:),'b');
 legend('X','Y','Z');
 hold off;
 
 figure();
 hold on;
 title('Se�al Actitud');
-plot(t,plotAttSignal(3,:));
-plot(t,plotAttSignal(2,:));
-plot(t,plotAttSignal(1,:));
+plot(t,plotAttSignal(3,:),'r');
+plot(t,plotAttSignal(2,:),'g');
+plot(t,plotAttSignal(1,:),'b');
 legend('Psi','Theta','Phi');
 hold off;
 
 figure();
 hold on;
 title('Velocidad Posicion');
-plot(t,plotPos(4,:));
-plot(t,plotPos(5,:));
-plot(t,plotPos(6,:));
+plot(t,plotPos(4,:),'r');
+plot(t,plotPos(5,:),'g');
+plot(t,plotPos(6,:),'b');
 legend('x','y','z');
 hold off;
 
