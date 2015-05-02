@@ -1,17 +1,20 @@
-classdef
+classdef nmedidas
   properties
     numMed;
     medidas;
     derMedidas;
     dt;
+    weights;
   end
   methods
-    function this = nmedidas(numMed,dt)
+    function this = nmedidas(numMed,dim,dt)
       this.numMed     = numMed;
-      this.medidas    = zeros(numMed,1);
-      this.derMedidas = zeros(numMed,1);
+      this.medidas    = zeros(numMed,dim);
+      this.derMedidas = zeros(numMed,dim);
       this.dt         = dt;
+      this.weights    = (0:(numMed-1))';
     end
-    med = nfilter(this, new, derNew);
+    this = nfilter(this, new, derNew);
+    med  = getNMes(this);
   end
 end

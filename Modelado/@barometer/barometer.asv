@@ -1,0 +1,8 @@
+classdef barometer
+    properties
+        cov;
+    end
+    methods
+        function this = ba
+    end
+end
