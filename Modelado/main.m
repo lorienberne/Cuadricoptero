@@ -24,76 +24,94 @@ ACov        = 0.0001;
 GCov        = 0.0001;
 GPSPosCov   = 1;
 GPSSpeedCov = 0.1;
+GPSDirCov   = 0.001;
+
+%% KALMAN ATTITUDE MODEL
+% COVARIANCE MATRIX
+attQ = [ACov 0 0 0; % A -> ACCELEROMETER'S COVARIANCE
+        0 ACov 0 0;
+        0 0 GCov 0;
+        0 0 0 GCov];
 
 % COVARIANCE MATRIX
-attQ = [MCov 0 0 0 0 0; % M -> MAGNETOMETER'S COVARIANCE
-        0 ACov 0 0 0 0; % A -> ACCELEROMETER'S COVARIANCE
-        0 0 ACov 0 0 0;
-        0 0 0 GCov 0 0; % G -> GYROSCOPE'S COVARIANCE
-        0 0 0 0 GCov 0;
-        0 0 0 0 0 GCov];
-
-% COVARIANCE MATRIX
-attR = [MCov 0 0 0 0 0; % M -> MAGNETOMETER'S COVARIANCE
-        0 ACov 0 0 0 0; % A -> ACCELEROMETER'S COVARIANCE
-        0 0 ACov 0 0 0;
-        0 0 0 GCov 0 0; % G -> GYROSCOPE'S COVARIANCE
-        0 0 0 0 GCov 0;
-        0 0 0 0 0 GCov];
+attR = [ACov 0 0 0; % A -> ACCELEROMETER'S COVARIANCE
+        0 ACov 0 0;
+        0 0 GCov 0;
+        0 0 0 GCov];
 
 % KALMAN MATHEMATICAL MODEL MATRICES
-attA = [0 0 0 1 0 0;
-        0 0 0 0 1 0;
-        0 0 0 0 0 1;
-        0 0 0 0 0 0;
-        0 0 0 0 0 0;
-        0 0 0 0 0 0];
+attA = [0 0 1 0;
+        0 0 0 1;
+        0 0 0 0;
+        0 0 0 0];   
+attB = [     0         0     ;
+             0         0     ;
+      0.000212         0     ;
+             0     0.000212  ];
+attC = eye(4);
+attD = zeros(4,2);
 
-attB = [     0         0         0     ;
-             0         0         0     ;
-             0         0         0     ;
-      0.000212         0         0     ;
-             0     0.000212      0     ;
-             0         0    0.0000638 ];
 
-attC = eye(6);
-attD = zeros(6,3);
+%% KALMAN ORIENTATION MODEL
+% COVARIANCE MATRIX
 
+psiQ = [MCov 0;
+       0 GCov];
+% COVARIANCE MATRIX
+psiR = [MCov 0;
+        0 GCov];
+    
+% KALMAN MATHEMATICAL MODEL MATRICES
+psiA = [0 1;
+        0 0];
+psiB = [0;0.00003638];
+psiC = eye(2);
+psiD = zeros(2,1);
+
+%% KALMAN HORIZONTAL POSITION MODEL
+% COVARIANCE MATRIX
+posQ = [GPSPosCov   0 0 0;
+        0 GPSPosCov   0 0;
+        0 0 GPSSpeedCov 0;
+        0 0 0 GPSSpeedCov];
 
 % COVARIANCE MATRIX
-posQ = [GPSPosCov 0 0 0 0 0;
-        0 GPSPosCov 0 0 0 0;
-        0 0 GPSPosCov 0 0 0;
-        0 0 0 GPSSpeedCov 0 0;
-        0 0 0 0 GPSSpeedCov 0;
-        0 0 0 0 0 GPSSpeedCov];
-
-% COVARIANCE MATRIX
-posR = [GPSPosCov   0 0 0 0 0;
-        0  GPSPosCov  0 0 0 0;
-        0 0  GPSPosCov  0 0 0;
-        0 0 0 GPSSpeedCov 0 0;
-        0 0 0 0 GPSSpeedCov 0;
-        0 0 0 0 0 GPSSpeedCov];
+posR = [GPSPosCov   0 0 0;
+        0 GPSPosCov   0 0;
+        0 0 GPSSpeedCov 0;
+        0 0 0 GPSSpeedCov];
 
 % KALMAN MATHEMATICAL MODEL MATRICES
-posA = [0 0 0 1 0 0;
-        0 0 0 0 1 0;
-        0 0 0 0 0 1;
-        0 0 0 0 0 0;
-        0 0 0 0 0 0;
-        0 0 0 0 0 0];
+posA = [0 0 1 0;
+        0 0 0 1;
+        0 0 0 0;
+        0 0 0 0];    
 
-posB = [      0          0        0       0    ;
-              0          0        0       0    ;
-              0          0        0       0    ;
-              0          0     -96.145    0    ;
-              0          96.145   0       0     ;
-        -0.0000094838    0        0       0    ];
 
-posC = eye(6);
-posD = zeros(6,4);
+posB = [    0         0    0;
+            0         0    0;
+            0      -96.145 0;
+          96.145      0    0];
 
+posC = eye(4);
+posD = zeros(4,3);
+
+%% KALMAN ALTITUDE MODEL
+% COVARIANCE MATRIX
+zQ = [GPSPosCov 0
+      0 GPSSpeedCov];
+  
+% COVARIANCE MATRIX
+zR = [GPSPosCov 0;
+      0 GPSSpeedCov];
+
+% KALMAN MATHEMATICAL MODEL MATRICES
+zA = [0 1;
+      0 0];
+
+zB = [0;-0.0000094838];
+zC = eye(2);
+ZD = zeros(2,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -115,6 +133,8 @@ rotorIz = 0.0001;
 kProp = [0.000009958, 0.0000009315];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 
 
@@ -150,14 +170,17 @@ posSttVect   = [0; 0; 0; 0; 0; 0];
 
 %luenObs = luenberger(K) %UNCOMMENT TO USE A LUENBERGER OBSERVER
 attKalFil       = kalman(attQ, attR, attA, attB, attC, attD, dt); %COMMENT IF YOU USE A LUENBERGER OBSERVER
+psiKalFil       = kalman(psiQ, psiR, psiA, psiB, psiC, psiD, dt);
 posKalFil       = kalman(posQ, posR, posA, posB, posC, posD, dt);
+zKalFil         = kalman(zQ, zR, zA, zB, zC, zD, dt);
 q           	= quad(posSttVect, attitSttVect, m, l, I, rotorIz, kProp, dt);
 attfback        = fback(attK);
 posfback        = fback(posK);
 accelSensor     = accel(ACov);
 magnetSensor    = magnet(MCov);
 gyroSensor      = gyro(GCov);
-gpsSensor       = gps([GPSPosCov; GPSSpeedCov]);
+gpsSensor       = gps([GPSPosCov; GPSSpeedCov; GPSDirCov]);
+baroSensor      = barometer(BCov);
 abFilter        = alphabeta();
 posNmedFilter   = nmedidas(5,3,dt);
 attNmedFilter   = nmedidas(5,3,dt);
@@ -170,7 +193,7 @@ attNmedFilter   = nmedidas(5,3,dt);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-posDesState = [0; 4; 0; 0; 0; 0];
+posDesState = [2; 3; -3; 0; 0; 0];
 posFBSignal = [0; 0; 0; 0];
 
 % VARIABLES TO SAVE INFORMATION FOR LATER PLOTS
@@ -206,15 +229,24 @@ for t = 0:dt:5
   posMState =  gpsSensor.gpsMeasure(q);
   
 %ESTIMATE QUAD STATE
-  attKalFil = attKalFil.updateKalman(attU, attMState);
-  posKalFil = posKalFil.updateKalman(posU, posMState); 
-    
-  attState = attKalFil.getState();
-  posState = posKalFil.getState();
+  attKalFil = attKalFil.updateKalman(attU(1:2), attMState);
+  posKalFil = posKalFil.updateKalman(posU(2:4), posMState); 
+  attKalState = attKalFil.getState(); 
+  posKalState = posKalFil.getState();
+  
 %FILTER WITH ALPHA BETA FILTER
- %zAlphaFiltered   = abFilter.alphaFilter(posKalFil.pPosteriori());
- %dirAlphaFiltered = abFilter.alphaFilter(); 
+ zAlphaFiltered   = abFilter.alphaFilter(posKalFil.pPosteriori());
+ dirAlphaFiltered = abFilter.alphaFilter(); 
 
+%REBUILD POSITION AND ATTITUDE STATE VECTORS
+  attState = [attKalState(1:2)
+              dirAlphaFiltered;
+              attKalState(4:6)];
+              
+  posState = [posKalState(1:2);
+              zAlphaFiltered;
+              posKalState(4:6)];
+  
 %UPDATE N MEASUREMENTS FILTER
  posNmedFilter = posNmedFilter.nfilter(posState(1:3), posState(4:6));
  attNmedFilter = attNmedFilter.nfilter(attState(1:3), attState(4:6));
@@ -223,7 +255,6 @@ for t = 0:dt:5
  attNFil = attNmedFilter.getNMes();
  posNFil = posNmedFilter.getNMes();
 
- 
 %GET CONTROL SIGNAL AND SET PROPS TO THAT SPEED
   posFBSignal = posfback.getControlSignal(posNFil, posDesState);
   attFBSignal = attfback.getControlSignal(attNFil,[posFBSignal(2:4,1); 0; 0; 0]);
@@ -231,10 +262,12 @@ for t = 0:dt:5
     
 %CARRY OUT A SIMULATION TIMESTEP
   q = q.simQuad();
-  q.posSttVect
 %PLOT THE RESULT
-  q.drawQuad(5);
+  q.drawQuad(3);
   pause(dt);
+  
+
+%SAVE DATA FOR PLOTS
   plotPos  = [plotPos posNFil];
   plotEPos = [plotEPos posMState];
   plotRPos = [plotRPos q.posSttVect];

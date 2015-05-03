@@ -12,11 +12,11 @@
 
 classdef kalman
     properties
-        xPriori     = zeros(6,1);
-        xPosteriori = zeros(6,1);
-        pPriori     = zeros(6,6);
-        pPosteriori = zeros(6,6);
-        K           = zeros(6,1);
+        xPriori;
+        xPosteriori;
+        pPriori;
+        pPosteriori;
+        K;
 
 % COVARIANCE MATRICES
         Q;
@@ -44,6 +44,11 @@ classdef kalman
             this.C      = C;
             this.D      = D;
             this.dt     = dt;
+            this.xPriori     = zeros(length(A),1);
+            this.xPosteriori = zeros(length(A),1);
+            this.pPriori     = zeros(length(A),length(A));
+            this.pPosteriori = zeros(length(A),length(A));
+            this.K           = zeros(length(A),1);
         end
 
         this = CalcXPriori(this,u);

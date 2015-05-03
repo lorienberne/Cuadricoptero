@@ -6,6 +6,6 @@ classdef barometer
         function this = barometer(cov)
             this.cov = cov;
         end
-        baroMeasure();
+        alt = baroMeasure(this);
     end
 end
